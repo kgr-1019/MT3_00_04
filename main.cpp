@@ -41,14 +41,14 @@ Matrix4x4 Multiply(const Matrix4x4& rotateX, const Matrix4x4& rotateY, const Mat
 // 関数の定義
 
 // X軸回転行列
-Matrix4x4 MakeRotateXMatrix(const Vector3& rotate)
+Matrix4x4 MakeRotateXMatrix(float rotate)
 {
 	Matrix4x4 result{};
 
-	result.m[1][1] = std::cos(rotate.x);
-	result.m[1][2] = std::sin(rotate.x);
-	result.m[2][1] = -std::sin(rotate.x);
-	result.m[2][2] = std::cos(rotate.x);
+	result.m[1][1] = std::cos(rotate);
+	result.m[1][2] = std::sin(rotate);
+	result.m[2][1] = -std::sin(rotate);
+	result.m[2][2] = std::cos(rotate);
 	result.m[0][0] = 1;
 	result.m[3][3] = 1;
 
@@ -56,29 +56,29 @@ Matrix4x4 MakeRotateXMatrix(const Vector3& rotate)
 }
 
 // Y軸回転行列
-Matrix4x4 MakeRotateYMatrix(Vector3 rotate)
+Matrix4x4 MakeRotateYMatrix(float rotate)
 {
 	Matrix4x4 result{};
 
-	result.m[0][0] = std::cos(rotate.y);
-	result.m[0][2] = -std::sin(rotate.y);
+	result.m[0][0] = std::cos(rotate);
+	result.m[0][2] = -std::sin(rotate);
 	result.m[1][1] = 1;
-	result.m[2][0] = std::sin(rotate.y);
-	result.m[2][2] = std::cos(rotate.y);
+	result.m[2][0] = std::sin(rotate);
+	result.m[2][2] = std::cos(rotate);
 	result.m[3][3] = 1;
 
 	return result;
 }
 
 // Z軸回転行列
-Matrix4x4 MakeRotateZMatrix(Vector3 rotate)
+Matrix4x4 MakeRotateZMatrix(float rotate)
 {
 	Matrix4x4 result{};
 
-	result.m[0][0] = std::cos(rotate.z);
-	result.m[0][1] = std::sin(rotate.z);
-	result.m[1][0] = -std::sin(rotate.z);
-	result.m[1][1] = std::cos(rotate.z);
+	result.m[0][0] = std::cos(rotate);
+	result.m[0][1] = std::sin(rotate);
+	result.m[1][0] = -std::sin(rotate);
+	result.m[1][1] = std::cos(rotate);
 	result.m[2][2] = 1;
 	result.m[3][3] = 1;
 
@@ -120,6 +120,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 rotate{ 0.4f,1.43f,-0.8f };
 
 
+	Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
+	Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate.y);
+	Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate.z);
+	Matrix4x4 rotateXYZMatrix = Multiply(rotateXMatrix, Multiply(rotateYMatrix, rotateZMatrix));
+
+
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -132,12 +139,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-
-
-		Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate);
-		Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate);
-		Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate);
-		Matrix4x4 rotateXYZMatrix = Multiply(rotateXMatrix, Multiply(rotateYMatrix, rotateZMatrix));
 
 
 		///
